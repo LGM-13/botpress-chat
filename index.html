@@ -3,52 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <title>Botpress Chat</title>
-  <style>
-    html, body {
-      margin: 0;
-      height: 100%;
-    }
-    #bp-webchat {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 350px;
-      height: 500px;
-      z-index: 999999;
-    }
-  </style>
 </head>
 <body>
-  <div id="bp-webchat"></div>
-
-  <script src="https://cdn.botpress.cloud/webchat/v3.2/inject.js"></script>
-  <script src="https://files.bpcontent.cloud/2025/06/11/10/20250611101030-Z0LFRNV3.js"></script>
+  <!-- Botpress webchat scripts -->
+  <script src="https://cdn.botpress.cloud/webchat/v3.2/inject.js" defer></script>
+  <script src="https://files.bpcontent.cloud/2025/06/11/10/20250611101030-Z0LFRNV3.js" defer></script>
 
   <script>
-    // Restore previous session
-    const prevSession = localStorage.getItem('bp-session-id');
-
-    // Initialize the bot in the container
-    window.botpressWebChat.init({
+    // Initialize the Botpress bot
+    window.botpress.init({
       botId: "ddd69729-9aaa-41a7-931f-8d0007c6587c",
       clientId: "de31ffda-f044-43f9-b6fb-b67c52d53dcb",
-      container: document.getElementById('bp-webchat'),
-      sessionId: prevSession || undefined,
-      useSessionStorage: false
-    });
-
-    // Persist session
-    window.botpressWebChat.onEvent(function(event) {
-      if(event.type === "sessionStarted") {
-        localStorage.setItem("bp-session-id", event.value.sessionId);
+      configuration: {
+        website: {},
+        email: {},
+        phone: {},
+        termsOfService: {},
+        privacyPolicy: {}
       }
-    }, ["sessionStarted"]);
-
-    // Auto-open the chat immediately (or when icon clicked)
-    window.botpressWebChat.onEvent(function(event){
-      if(event.type === "widgetOpened") return;
-      window.botpressWebChat.open();  // opens the chat
     });
+
+    // Optional: auto-open the chat when the page loads
+    const waitForBot = setInterval(() => {
+      if (window.botpressWebChat && window.botpressWebChat.open) {
+        window.botpressWebChat.open(); // open chat automatically
+        clearInterval(waitForBot);
+      }
+    }, 200);
   </script>
 </body>
 </html>

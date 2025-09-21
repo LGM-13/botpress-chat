@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Botpress Chat</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+    #bp-webchat {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 350px;
+      height: 500px;
+      z-index: 999999;
+    }
+  </style>
+</head>
+<body>
+  <!-- Bot container -->
+  <div id="bp-webchat"></div>
+
+  <!-- Botpress scripts -->
+  <script src="https://cdn.botpress.cloud/webchat/v3.2/inject.js"></script>
+  <script src="https://files.bpcontent.cloud/2025/06/11/10/20250611101030-Z0LFRNV3.js"></script>
+
+  <script>
+    // Persist session across page reloads
+    const prevSession = localStorage.getItem('bp-session-id');
+
+    window.botpressWebChat.init({
+      botId: "ddd69729-9aaa-41a7-931f-8d0007c6587c",
+      clientId: "de31ffda-f044-43f9-b6fb-b67c52d53dcb",
+      container: document.getElementById('bp-webchat'),
+      sessionId: prevSession || undefined,
+      useSessionStorage: false
+    });
+
+    window.botpressWebChat.onEvent(function(event) {
+      if(event.type === "sessionStarted") {
+        localStorage.setItem("bp-session-id", event.value.sessionId);
+      }
+    }, ["sessionStarted"]);
+  </script>
+</body>
+</html>

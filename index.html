@@ -19,17 +19,16 @@
   </style>
 </head>
 <body>
-  <!-- Bot container -->
   <div id="bp-webchat"></div>
 
-  <!-- Botpress scripts -->
   <script src="https://cdn.botpress.cloud/webchat/v3.2/inject.js"></script>
   <script src="https://files.bpcontent.cloud/2025/06/11/10/20250611101030-Z0LFRNV3.js"></script>
 
   <script>
-    // Persist session across page reloads
+    // Restore previous session
     const prevSession = localStorage.getItem('bp-session-id');
 
+    // Initialize the bot in the container
     window.botpressWebChat.init({
       botId: "ddd69729-9aaa-41a7-931f-8d0007c6587c",
       clientId: "de31ffda-f044-43f9-b6fb-b67c52d53dcb",
@@ -38,11 +37,18 @@
       useSessionStorage: false
     });
 
+    // Persist session
     window.botpressWebChat.onEvent(function(event) {
       if(event.type === "sessionStarted") {
         localStorage.setItem("bp-session-id", event.value.sessionId);
       }
     }, ["sessionStarted"]);
+
+    // Auto-open the chat immediately (or when icon clicked)
+    window.botpressWebChat.onEvent(function(event){
+      if(event.type === "widgetOpened") return;
+      window.botpressWebChat.open();  // opens the chat
+    });
   </script>
 </body>
 </html>
